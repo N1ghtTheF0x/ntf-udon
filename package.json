@@ -1,0 +1,48 @@
+{
+  "name": "@ntf/<NAME>",
+  "version": "0.0.0",
+  "description": "Another <NAME> library",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    "require": {
+      "types": "./dist/index.d.cts",
+      "default": "./dist/index.cjs"
+    },
+    "import": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "scripts": {
+    "test": "tsx --tsconfig tsconfig.test.json test.mjs",
+    "build": "pkgroll --src source",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/N1ghtTheF0x/ntf-<NAME>.git"
+  },
+  "keywords": [
+    "esm",
+    "cjs",
+    "nodejs",
+    "browser"
+  ],
+  "author": "N1ghtTheF0x",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/N1ghtTheF0x/ntf-<NAME>/issues"
+  },
+  "homepage": "https://github.com/N1ghtTheF0x/ntf-<NAME>#readme",
+  "devDependencies": {
+    "typescript": "latest",
+    "tsx": "latest",
+    "express": "latest",
+    "pkgroll": "latest"
+  }
+}
