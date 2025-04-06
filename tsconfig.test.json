@@ -4,6 +4,7 @@
     "include": ["dist"],
     "compilerOptions": {
         "module": "CommonJS",
-        "moduleResolution": "Node"
+        "moduleResolution": "Node",
+        "types": ["node"]
     }
 }

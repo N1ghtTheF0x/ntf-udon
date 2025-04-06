@@ -2,7 +2,11 @@
 <html>
     <head>
         <script type="module">
-            
+            import * as udon from "./dist/index.mjs"
+            Object.defineProperty(window,"udon",{value: udon})
+            const testFile = await (await fetch("/test.udon")).text()
+            const asm = udon.UdonAssembly.parse(testFile)
+            Object.defineProperty(window,"asm",{value: asm})
         </script>
     </head>
     <body>

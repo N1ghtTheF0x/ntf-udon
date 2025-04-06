@@ -1,7 +1,7 @@
 {
-  "name": "@ntf/<NAME>",
-  "version": "0.0.0",
-  "description": "Another <NAME> library",
+  "name": "@ntf/udon",
+  "version": "0.0.1",
+  "description": "VRChat Udon Compiler in TypeScript or something like that",
   "files": [
     "dist"
   ],
@@ -19,30 +19,38 @@
     }
   },
   "scripts": {
-    "test": "tsx --tsconfig tsconfig.test.json test.mjs",
+    "test": "tsx --tsconfig tsconfig.test.json test.ts",
     "build": "pkgroll --src source",
     "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/N1ghtTheF0x/ntf-<NAME>.git"
+    "url": "git+https://github.com/N1ghtTheF0x/ntf-udon.git"
   },
   "keywords": [
     "esm",
     "cjs",
     "nodejs",
-    "browser"
+    "browser",
+    "vrchat",
+    "udon"
   ],
   "author": "N1ghtTheF0x",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/N1ghtTheF0x/ntf-<NAME>/issues"
+    "url": "https://github.com/N1ghtTheF0x/ntf-udon/issues"
   },
-  "homepage": "https://github.com/N1ghtTheF0x/ntf-<NAME>#readme",
+  "homepage": "https://github.com/N1ghtTheF0x/ntf-udon#readme",
   "devDependencies": {
-    "typescript": "latest",
-    "tsx": "latest",
     "express": "latest",
-    "pkgroll": "latest"
+    "pkgroll": "latest",
+    "tsx": "latest",
+    "typescript": "latest",
+    "@types/node": "latest"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }

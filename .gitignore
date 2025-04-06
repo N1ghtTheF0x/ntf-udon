@@ -131,3 +131,6 @@ dist
 
 # Compiled output
 dist
+
+# VRChat Udon
+*.udon
