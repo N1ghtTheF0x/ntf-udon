@@ -2,6 +2,11 @@ import type { ExternUdonCodeStatement } from "./asm/code/ops/extern"
 import { stripUdonType } from "./utilities"
 
 /**
+ * A resolvable type for {@link ExternReference}
+ */
+export type ResolvableExternReference = ExternReference | string | ReadonlyArray<string>
+
+/**
  * Represents a extern reference, used in {@link ExternUdonCodeStatement}
  */
 export class ExternReference
@@ -10,6 +15,25 @@ export class ExternReference
      * The argument types of this extern reference
      */
     public arguments: Array<string>
+    /**
+     * Resolve `reference` to a {@link ExternReference}
+     * @param reference Either a {@link ExternReference} instance or a string
+     * @returns A {@link ExternReference}
+     * @throws Parsing Error if `reference` is a string
+     */
+    public static resolve(reference: ResolvableExternReference)
+    {
+        if(Array.isArray(reference))
+        {
+            if(reference.length >= 3)
+                return new this(reference[0],reference[1],reference[2],...reference.slice(3))
+            throw new Error(`expected array of length 3, got ${reference.length} instead`)
+        }
+        return typeof reference == "string" ?
+        this.parse(reference) :
+        // bro wth TypeScript, ReadonlyArray IS an Array
+        reference as ExternReference
+    }
     /**
      * Parse a {@link ExternReference} from a string
      * @param line A string

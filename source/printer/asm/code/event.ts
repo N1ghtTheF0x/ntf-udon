@@ -1,4 +1,4 @@
-import { ExternReference } from "../../externreference"
+import { ExternReference, ResolvableExternReference } from "../../externreference"
 import { getLines } from "../../utilities"
 import { ANNOTATION_STATEMENT_NAME, AnnotationUdonCodeStatement } from "./ops/annotation"
 import { COPY_STATEMENT_NAME, CopyUdonCodeStatement } from "./ops/copy"
@@ -9,9 +9,12 @@ import { JUMP_INDIRECT_STATEMENT_NAME, JumpIndirectUdonCodeStatement } from "./o
 import { NoOperationUdonCodeStatement, NOP_STATEMENT_NAME } from "./ops/nop"
 import { POP_STATEMENT_NAME, PopUdonCodeStatement } from "./ops/pop"
 import { PUSH_STATEMENT_NAME, PushUdonCodeStatement } from "./ops/push"
-import { UdonCodeStatement } from "./statement"
+import { UdonCodeParameter, UdonCodeStatement } from "./statement"
 
-export const STATEMENTS = {
+/**
+ * A record of all valid statements inside a code section
+ */
+export const UDON_CODE_STATEMENTS = {
     [ANNOTATION_STATEMENT_NAME]: AnnotationUdonCodeStatement,
     [COPY_STATEMENT_NAME]: CopyUdonCodeStatement,
     [EXTERN_STATEMENT_NAME]: ExternUdonCodeStatement,
@@ -80,7 +83,7 @@ export class UdonCodeEvent
             {
                 if(typeof eName == "undefined")
                     return
-                for(const [statementName,Statement] of Object.entries(STATEMENTS))
+                for(const [statementName,Statement] of Object.entries(UDON_CODE_STATEMENTS))
                 {
                     if(tline.startsWith(statementName))
                     {
@@ -143,7 +146,7 @@ export class UdonCodeEvent
      * {@link https://creators.vrchat.com/worlds/udon/vm-and-assembly/#push-parameter Reference}
      * @param value Value to push
      */
-    public addPushStatement(value: string)
+    public addPushStatement(value: UdonCodeParameter)
     {
         return this.addStatement(new PushUdonCodeStatement(value))
     }
@@ -164,7 +167,7 @@ export class UdonCodeEvent
      * {@link https://creators.vrchat.com/worlds/udon/vm-and-assembly/#jump_if_false-parameter Reference}
      * @param position Position to jump to
      */
-    public addJumpIfFalseStatement(position: string)
+    public addJumpIfFalseStatement(position: UdonCodeParameter)
     {
         return this.addStatement(new JumpIfFalseUdonCodeStatement(position))
     }
@@ -176,9 +179,21 @@ export class UdonCodeEvent
      * {@link https://creators.vrchat.com/worlds/udon/vm-and-assembly/#jump-parameter Reference}
      * @param position Position to jump to
      */
-    public addJumpStatement(position: string)
+    public addJumpStatement(position: UdonCodeParameter)
     {
         return this.addStatement(new JumpUdonCodeStatement(position))
+    }
+    /**
+     * Return from Udon Code
+     * 
+     * Alias for:
+     * ```typescript
+     * this.addJumpStatement("0xFFFFFFFC")
+     * ```
+     */
+    public addReturnStatement()
+    {
+        return this.addJumpStatement("0xFFFFFFFC")
     }
     /**
      * This opcode is how Udon performs any useful operation whatsoever.
@@ -194,11 +209,11 @@ export class UdonCodeEvent
      * If the extern is not static (i.e. if it has a `this` argument), the `this` argument is added at the start. If there is a return value (i.e. the return type is not `SystemVoid`), it is treated like an `out` argument at the end.
      * 
      * {@link https://creators.vrchat.com/worlds/udon/vm-and-assembly/#extern-parameter Reference}
-     * @param reference A extern reference
+     * @param reference A extern reference, either a {@link ExternReference} or a string
      */
-    public addExternStatement(reference: ExternReference)
+    public addExternStatement(reference: ResolvableExternReference): this
     {
-        return this.addStatement(new ExternUdonCodeStatement(reference))
+        return this.addStatement(new ExternUdonCodeStatement(ExternReference.resolve(reference)))
     }
     /**
      * This is effectively a "long NOP". The parameter is ignored
@@ -206,7 +221,7 @@ export class UdonCodeEvent
      * {@link https://creators.vrchat.com/worlds/udon/vm-and-assembly/#annotation-parameter Reference}
      * @param parameter Unused
      */
-    public addAnnotationStatement(parameter: string)
+    public addAnnotationStatement(parameter: UdonCodeParameter)
     {
         return this.addStatement(new AnnotationUdonCodeStatement(parameter))
     }
@@ -218,7 +233,7 @@ export class UdonCodeEvent
      * {@link https://creators.vrchat.com/worlds/udon/vm-and-assembly/#jump_indirect-parameter Reference}
      * @param index Index from heap
      */
-    public addJumpIndirectStatement(index: string)
+    public addJumpIndirectStatement(index: UdonCodeParameter)
     {
         return this.addStatement(new JumpIndirectUdonCodeStatement(index))
     }
@@ -237,6 +252,7 @@ export class UdonCodeEvent
      */
     public isBuiltIn()
     {
+        // simple as that
         return this.name.startsWith("_")
     }
     public toString()

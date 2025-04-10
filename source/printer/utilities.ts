@@ -19,6 +19,11 @@ export function getLines(content: string)
     .split("\n")
     .map((line) => line.trim())
 }
+/**
+ * Remove Udon Assembly comments, anything that starts with `#`
+ * @param content A multiline string
+ * @returns `content` but with no lines/parts with `#`
+ */
 export function removeComments(content: string)
 {
     return getLines(content)

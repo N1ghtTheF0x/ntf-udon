@@ -1,6 +1,9 @@
 import { ExportUdonStatement } from "./common/export"
 import { SyncUdonStatement, UdonSyncMode } from "./common/sync"
 
+/**
+ * A statement that can be found inside {@link UdonSection}s
+ */
 export type UdonSectionStatement = ExportUdonStatement | SyncUdonStatement
 
 /**

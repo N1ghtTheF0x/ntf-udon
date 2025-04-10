@@ -1,3 +1,6 @@
+/**
+ * Represents a generic statement in the Udon Assembly
+ */
 export abstract class UdonStatement
 {
     /**

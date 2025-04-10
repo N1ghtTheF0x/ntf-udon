@@ -1,4 +1,4 @@
-import { UdonCodeStatement } from "../statement"
+import { UdonCodeParameter, UdonCodeStatement } from "../statement"
 
 export const JUMP_INDIRECT_STATEMENT_NAME = "JUMP_INDIRECT"
 
@@ -31,18 +31,18 @@ export class JumpIndirectUdonCodeStatement extends UdonCodeStatement
         const position = parts[1].trim()
         if(position.length === 0)
             throw new Error("invalid position parameter")
-        return new this(position)
+        return new this(this.parseParameter(position))
     }
     /**
      * Create a {@link JumpIndirectUdonCodeStatement}
      * @param index Index from heap
      */
-    public constructor(public index: string)
+    public constructor(public index: UdonCodeParameter)
     {
         super(JUMP_INDIRECT_STATEMENT_NAME,8,1)
     }
     public toString(): string
     {
-        return `${this.name}, ${this.index}`
+        return `${this.name}, ${UdonCodeStatement.printParameter(this.index)}`
     }
 }

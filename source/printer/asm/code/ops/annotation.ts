@@ -1,4 +1,4 @@
-import { UdonCodeStatement } from "../statement"
+import { UdonCodeParameter, UdonCodeStatement } from "../statement"
 
 export const ANNOTATION_STATEMENT_NAME = "ANNOTATION"
 
@@ -29,18 +29,18 @@ export class AnnotationUdonCodeStatement extends UdonCodeStatement
         const parameter = parts[1].trim()
         if(parameter.length === 0)
             throw new Error("invalid parameter value")
-        return new this(parameter)
+        return new this(this.parseParameter(parameter))
     }
     /**
      * Create a {@link AnnotationUdonCodeStatement}
      * @param parameter Unused
      */
-    public constructor(public parameter: string)
+    public constructor(public parameter: UdonCodeParameter)
     {
         super(ANNOTATION_STATEMENT_NAME,7,1)
     }
     public toString(): string
     {
-        return `${this.name}, ${this.parameter}`
+        return `${this.name}, ${UdonCodeStatement.printParameter(this.parameter)}`
     }
 }

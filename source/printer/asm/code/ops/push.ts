@@ -1,4 +1,4 @@
-import { UdonCodeStatement } from "../statement"
+import { UdonCodeParameter, UdonCodeStatement } from "../statement"
 
 export const PUSH_STATEMENT_NAME = "PUSH"
 
@@ -35,18 +35,18 @@ export class PushUdonCodeStatement extends UdonCodeStatement
         const value = parts[1].trim()
         if(value.length === 0)
             throw new Error("invalid value parameter")
-        return new this(value)
+        return new this(this.parseParameter(value))
     }
     /**
      * Create a {@link PushUdonCodeStatement}
      * @param value Value to push
      */
-    public constructor(public value: string)
+    public constructor(public value: UdonCodeParameter)
     {
         super(PUSH_STATEMENT_NAME,1,1)
     }
     public toString(): string
     {
-        return `${this.name}, ${this.value}`
+        return `${this.name}, ${UdonCodeStatement.printParameter(this.value)}`
     }
 }
