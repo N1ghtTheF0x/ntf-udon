@@ -20,7 +20,7 @@
   },
   "scripts": {
     "test": "tsx --tsconfig tsconfig.test.json test.ts",
-    "build": "pkgroll --src source",
+    "build": "pkgroll --src source --clean-dist",
     "prepublishOnly": "npm run build"
   },
   "repository": {
