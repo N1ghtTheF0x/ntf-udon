@@ -24,9 +24,9 @@ export class ExportUdonStatement extends UdonStatement
      * Create a {@link ExportUdonStatement}
      * @param name The name of the exported field
      */
-    public constructor(public name: string)
+    public constructor(public name: string,comment?: string)
     {
-        super()
+        super(comment)
     }
     public toString(): string
     {

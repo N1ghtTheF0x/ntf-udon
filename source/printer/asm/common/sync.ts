@@ -36,9 +36,9 @@ export class SyncUdonStatement extends UdonStatement
      * @param name The name of the field
      * @param mode The sync mode to use
      */
-    public constructor(public name: string,public mode: UdonSyncMode)
+    public constructor(public name: string,public mode: UdonSyncMode,comment?: string)
     {
-        super()
+        super(comment)
     }
     public toString(): string
     {

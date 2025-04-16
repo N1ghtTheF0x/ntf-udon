@@ -1,10 +1,11 @@
+import { CommentUdonStatement } from "./common/comment"
 import { ExportUdonStatement } from "./common/export"
 import { SyncUdonStatement, UdonSyncMode } from "./common/sync"
 
 /**
  * A statement that can be found inside {@link UdonSection}s
  */
-export type UdonSectionStatement = ExportUdonStatement | SyncUdonStatement
+export type UdonSectionStatement = ExportUdonStatement | SyncUdonStatement | CommentUdonStatement
 
 /**
  * Represents a generic section in Udon Assembly
@@ -20,6 +21,8 @@ export abstract class UdonSection
     public static parseStatement(line: string): UdonSectionStatement
     {
         const tline = line.trim()
+        if(tline.startsWith(CommentUdonStatement.COMMENT_PREFIX))
+            return CommentUdonStatement.parse(tline)
         if(tline.startsWith(".export "))
             return ExportUdonStatement.parse(tline)
         if(tline.startsWith(".sync "))
@@ -52,6 +55,15 @@ export abstract class UdonSection
     public addSync(name: string,mode: UdonSyncMode)
     {
         return this.addStatement(new SyncUdonStatement(name,mode))
+    }
+    /**
+     * Add a line comment. This statement has no logic
+     * @param comment The content of the comment
+     * @returns this
+     */
+    public addComment(comment: string)
+    {
+        return this.addStatement(new CommentUdonStatement(comment))
     }
     /**
      * Add a statement to this section
